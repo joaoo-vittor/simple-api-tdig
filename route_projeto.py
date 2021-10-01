@@ -28,6 +28,7 @@ def get_projetos():
                         "palavra_chave_3": el[6],
                         "url_documento": el[7],
                         "professor_id": el[8],
+                        "aluno_id": el[9],
                     }
                 )
 
