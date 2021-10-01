@@ -17,5 +17,7 @@ class Projeto(Base):
     palavra_chave_3 = Column(String(200), nullable=True)
     url_documento = Column(String(200), nullable=True)
     professor_id = Column(Integer, ForeignKey('professor.id'))
+    aluno_id = Column(Integer, ForeignKey('aluno.id'))
 
     professor = relationship('Professor')
+    aluno = relationship('Aluno')
