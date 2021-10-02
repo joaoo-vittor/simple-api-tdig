@@ -123,16 +123,11 @@ def put_projeto(id):
         or "palavra_chave_2" in data.keys()
         or "palavra_chave_3" in data.keys()
         or "url_documento" in data.keys()
+        or "professor_id" in data.keys()
+        or "aluno_id" in data.keys()
     ):
         with DBConnectionHandler() as connection:
             try:
-
-                if "professor_id" in data.keys():
-                    data.pop("professor_id")
-
-                if "aluno_id" in data.keys():
-                    data.pop("aluno_id")
-
                 connection.session.query(Projeto).filter_by(id=id).update(
                     data, synchronize_session=False
                 )
