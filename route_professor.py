@@ -36,23 +36,44 @@ def get_professores():
     return jsonify(message), 200
 
 
+@app_bp_professor.route("/read_one/<id>", methods=["GET"])
+def get_professor(id):
+    id = int(id)
+
+    with DBConnectionHandler() as connection:
+        try:
+            engine = connection.get_engine()
+            data = engine.execute(f"SELECT * FROM professor WHERE professor.id = {id};")
+
+            for el in data:
+                message = {
+                    "id": el[0],
+                    "matricula": el[1],
+                    "nome": el[2],
+                    "curso": el[3],
+                    "endereco_id": el[4],
+                }
+
+        except:
+            connection.session.rollback()
+            raise
+        finally:
+            connection.session.close()
+
+    return jsonify(message), 200
+
+
 @app_bp_professor.route("/create", methods=["POST"])
 def post_professor():
     data = request.get_json(force=True)
 
-    if (
-        "matricula" in data.keys()
-        and "nome" in data.keys()
-        and "endereco_id" in data.keys()
-        and "curso" in data.keys()
-    ):
+    if "matricula" in data.keys() and "nome" in data.keys() and "curso" in data.keys():
         with DBConnectionHandler() as connection:
             try:
                 new_user = Professor(
                     matricula=data["matricula"],
                     nome=data["nome"],
                     curso=data["curso"],
-                    endereco_id=data["endereco_id"],
                 )
 
                 connection.session.add(new_user)

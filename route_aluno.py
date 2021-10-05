@@ -37,6 +37,34 @@ def get_alunos():
     return jsonify(message), 200
 
 
+@app_bp_alunos.route("/read_one/<id>", methods=["GET"])
+def get_aluno(id):
+    id = int(id)
+
+    with DBConnectionHandler() as connection:
+        try:
+            engine = connection.get_engine()
+            data = engine.execute(f"SELECT * FROM aluno WHERE aluno.id = {id};")
+
+            for el in data:
+                message = {
+                    "id": el[0],
+                    "matricula": el[1],
+                    "nome": el[2],
+                    "cpf": el[3],
+                    "curso": el[4],
+                    "endereco_id": el[5],
+                }
+
+        except:
+            connection.session.rollback()
+            raise
+        finally:
+            connection.session.close()
+
+    return jsonify(message), 200
+
+
 @app_bp_alunos.route("/create", methods=["POST"])
 def post_aluno():
     data = request.get_json(force=True)

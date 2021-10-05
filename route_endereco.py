@@ -41,6 +41,7 @@ def get_enderecos():
 @app_bp_endereco.route("/read_one/<id>", methods=["GET"])
 def get_endereco(id):
     id = int(id)
+
     with DBConnectionHandler() as connection:
         try:
             engine = connection.get_engine()
